@@ -23,7 +23,7 @@ def gcompare(*queries):
 
     ratios = [ar / float(arity_sum) for ar in arities]
     for (query, ratio, arity) in zip(queries, ratios, arities):
-        print("{} {:4.3f}: {}".format(query, ratio, int(ratio * 50) * "#"))
+        print("{} {:4.3f}% ({}): {}".format(query, ratio * 100, arity, int(percent * 50) * "#"))
 
 def main():
     import sys
