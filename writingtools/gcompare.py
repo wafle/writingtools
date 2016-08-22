@@ -5,25 +5,21 @@ def gcompare(*queries):
     session = FuturesSession()
     results = []
     for query in queries:
-        results.append(session.get('http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q="{}"'.format(query)))
+        results.append(session.get('https://www.googleapis.com/customsearch/v1?key=AIzaSyA81rdeOh9QiSbvOG4xEcTvK-jZBXl_HMc&cx=008639277777108339676:gt1rhznvzgm&q="{}"'.format(query)))
     results = [json.loads(r.result().text) for r in results]
-    for result in results:
-        if result["responseStatus"] == 403:
-            print("API limits reached")
-            exit(1)
     arity_sum = 0
     arities = []
     for res in results:
-        if "estimatedResultCount" in res["responseData"]["cursor"]:
-            arity = int(res["responseData"]["cursor"]["estimatedResultCount"])
-            arities.append(arity)
-            arity_sum += arity
-        else:
-            arities.append(0)
+        if "error" in res:
+            print(res["error"]["errors"][0]["reason"])
+            exit(1)
+        arity = int(res["queries"]["request"][0]["totalResults"])
+        arities.append(arity)
+        arity_sum += arity
 
     ratios = [ar / float(arity_sum) for ar in arities]
     for (query, ratio, arity) in zip(queries, ratios, arities):
-        print("{} {:4.3f}% ({}): {}".format(query, ratio * 100, arity, int(percent * 50) * "#"))
+        print("{} {:4.3f}% ({}): {}".format(query, ratio * 100, arity, int(ratio * 50) * "#"))
 
 def main():
     import sys
