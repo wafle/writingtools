@@ -10,7 +10,7 @@ setup(
     url='https://github.com/wafle/writing-tools',
     license='MIT',
     packages=[],
-    install_requires=['json','requests_futures', 'beautifulsoup4'],
+    install_requires=['requests_futures', 'beautifulsoup4'],
     include_package_data=True,
     zip_safe=False,
     entry_points={'console_scripts': [
